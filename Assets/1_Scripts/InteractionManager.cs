@@ -13,6 +13,8 @@ public class InteractionManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI errorLabel;
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private GameObject hintContainer;
+    [SerializeField] private GameObject hintButton;
+    [SerializeField] private Animator hintAnimator;
     [SerializeField] private RectTransform errorContainer;
     [SerializeField] private TextMeshProUGUI hintsCountLabel;
     [SerializeField] private TextMeshProUGUI mistakesCountLabel;
@@ -119,7 +121,9 @@ public class InteractionManager : MonoBehaviour
     private void StopHelpAndErrorDisplay()
     {
         StopAllCoroutines();
+        hintAnimator.SetTrigger("close");
         hintContainer.gameObject.SetActive(false);
+        hintButton.gameObject.SetActive(true);
         errorContainer.gameObject.SetActive(false);
     }
 
