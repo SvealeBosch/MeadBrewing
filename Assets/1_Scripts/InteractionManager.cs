@@ -65,7 +65,7 @@ public class InteractionManager : MonoBehaviour
             
                 RaycastHit hit;
             
-                if (Physics.Raycast(ray, out hit, 20.0f, layerMask))
+                if (Physics.Raycast(ray, out hit, 10.0f, layerMask))
                 {
                     CheckInteractionOrder(hit.transform.gameObject);
                     String objectName = hit.transform.gameObject.name.ToString();
@@ -80,9 +80,9 @@ public class InteractionManager : MonoBehaviour
     {
         if (selectedGameObject.Equals(currentInteraction.GameObject))
         {
- 
             StopHelpAndErrorDisplay();
             currentInteraction.OnExecution?.Invoke();
+
             interactionIndex++;
             if(interactionIndex >= interactions.Count)
                 return;
