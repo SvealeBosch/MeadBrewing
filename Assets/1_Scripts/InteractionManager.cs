@@ -29,6 +29,13 @@ public class InteractionManager : MonoBehaviour
     private int mistakesCount;
     private int hintCount;
 
+    private bool inputBlocked;
+    public bool InputBlocked
+    {
+        get => this.inputBlocked;
+        set => this.inputBlocked = value;
+    }
+
     private Camera cam;
 
     private void Awake() => cam = Camera.main;
@@ -45,24 +52,27 @@ public class InteractionManager : MonoBehaviour
     {
         DebugDrawRay();
 
-        if (Input.GetMouseButtonDown(0))
+        if (!inputBlocked)
         {
-            // Get the mouse position in screen coordinates
-            Vector2 screenPos = Input.mousePosition;
-            // Convert the screen position to the local position inside the canvas
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(uiCanvasRectTransform, screenPos, null, out this.mouseOnCanvasPos);
-
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            
-            RaycastHit hit;
-            
-            if (Physics.Raycast(ray, out hit, 20.0f, layerMask))
+            if (Input.GetMouseButtonDown(0))
             {
-                CheckInteractionOrder(hit.transform.gameObject);
-                String objectName = hit.transform.gameObject.name.ToString();
-                Debug.Log(objectName);
-            }
+                // Get the mouse position in screen coordinates
+                Vector2 screenPos = Input.mousePosition;
+                // Convert the screen position to the local position inside the canvas
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(uiCanvasRectTransform, screenPos, null, out this.mouseOnCanvasPos);
+
+                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             
+                RaycastHit hit;
+            
+                if (Physics.Raycast(ray, out hit, 20.0f, layerMask))
+                {
+                    CheckInteractionOrder(hit.transform.gameObject);
+                    String objectName = hit.transform.gameObject.name.ToString();
+                    Debug.Log(objectName);
+                }
+            
+            }   
         }
     }
 
@@ -70,9 +80,9 @@ public class InteractionManager : MonoBehaviour
     {
         if (selectedGameObject.Equals(currentInteraction.GameObject))
         {
+ 
             StopHelpAndErrorDisplay();
             currentInteraction.OnExecution?.Invoke();
-            
             interactionIndex++;
             if(interactionIndex >= interactions.Count)
                 return;
@@ -103,6 +113,8 @@ public class InteractionManager : MonoBehaviour
             Debug.DrawLine(ray.origin, ray.origin + ray.direction * 20.0f, Color.red);
         }
     }
+
+    
     
     /// <summary>
     /// This coroutine displays a text (msg) for a fixed number of seconds (duration)
@@ -144,4 +156,5 @@ public class InteractionManager : MonoBehaviour
         this.statsHintsCountLabel.SetText(this.hintCount.ToString());
         this.statsMistakesCountLabel.SetText(this.mistakesCount.ToString());
     }
+   
 }
