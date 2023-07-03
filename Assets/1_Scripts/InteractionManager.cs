@@ -80,9 +80,9 @@ public class InteractionManager : MonoBehaviour
     {
         if (selectedGameObject.Equals(currentInteraction.GameObject))
         {
- 
             StopHelpAndErrorDisplay();
             currentInteraction.OnExecution?.Invoke();
+
             interactionIndex++;
             if(interactionIndex >= interactions.Count)
                 return;
