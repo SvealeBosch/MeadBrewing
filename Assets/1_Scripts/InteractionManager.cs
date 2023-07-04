@@ -7,7 +7,8 @@ using UnityEngine.UIElements;
 
 public class InteractionManager : MonoBehaviour
 {
-    [SerializeField] private RectTransform uiCanvasRectTransform; 
+    [SerializeField] private RectTransform uiCanvasRectTransform;
+    [SerializeField] private CanvasGroup uiCanvasGroup;
     [SerializeField] private TextMeshProUGUI instructionLabel;
     [SerializeField] private TextMeshProUGUI helpLabel;
     [SerializeField] private TextMeshProUGUI errorLabel;
@@ -82,6 +83,7 @@ public class InteractionManager : MonoBehaviour
         {
             StopHelpAndErrorDisplay();
             currentInteraction.OnExecution?.Invoke();
+            StartCoroutine(DelayedActions());
 
             interactionIndex++;
             if(interactionIndex >= interactions.Count)
@@ -97,6 +99,16 @@ public class InteractionManager : MonoBehaviour
             countmistake();
             StartCoroutine(DisplayForDuration(errorLabel, currentInteraction.ErrorMsg, 3.0f));
         }
+    }
+
+    public IEnumerator DelayedActions()
+    {
+        startFadeOutUI();
+        inputBlocked = true;
+        yield return new WaitForSeconds(currentInteraction.delay);
+        //currentInteraction.OnExecutionFinished?.Invoke();
+        startFadeInUI();
+        inputBlocked = false;
     }
 
     private void DebugDrawRay()
@@ -137,6 +149,49 @@ public class InteractionManager : MonoBehaviour
         hintContainer.gameObject.SetActive(false);
         hintButton.gameObject.SetActive(true);
         errorContainer.gameObject.SetActive(false);
+    }
+
+    public void startFadeOutUI()
+    {
+        StartCoroutine((FadeOutUI()));
+    }
+    public void startFadeInUI()
+    {
+        StartCoroutine((FadeInUI()));
+    }
+
+    private IEnumerator FadeOutUI()
+    {
+        float fadeDuration = 1.0f;
+        float elapsedTime = 0.0f;
+        float startAlpha = uiCanvasGroup.alpha;
+
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float newAlpha = Mathf.Lerp(startAlpha, 0.0f, elapsedTime / fadeDuration);
+            uiCanvasGroup.alpha = newAlpha;
+            yield return null;
+        }
+
+        uiCanvasGroup.alpha = 0.0f;
+    }
+    
+    private IEnumerator FadeInUI()
+    {
+        float fadeDuration = 1.0f;
+        float elapsedTime = 0.0f;
+        float startAlpha = uiCanvasGroup.alpha;
+
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float newAlpha = Mathf.Lerp(startAlpha, 1.0f, elapsedTime / fadeDuration);
+            uiCanvasGroup.alpha = newAlpha;
+            yield return null;
+        }
+
+        uiCanvasGroup.alpha = 1.0f;
     }
 
     public void countHint()
