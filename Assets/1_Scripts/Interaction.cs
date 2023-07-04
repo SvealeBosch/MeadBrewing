@@ -8,5 +8,8 @@ public struct Interaction
     public string Instruction;
     public string HelpMsg;
     public string ErrorMsg;
+    public float delay;
     public UnityEvent OnExecution;
+    public UnityEvent OnExecutionFinished;
+
 }
