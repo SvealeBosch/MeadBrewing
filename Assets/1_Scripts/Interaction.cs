@@ -10,6 +10,4 @@ public struct Interaction
     public string ErrorMsg;
     public float delay;
     public UnityEvent OnExecution;
-    public UnityEvent OnExecutionFinished;
-
 }

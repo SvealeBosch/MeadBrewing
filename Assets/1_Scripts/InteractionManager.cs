@@ -90,9 +90,9 @@ public class InteractionManager : MonoBehaviour
                 return;
             
             currentInteraction = interactions[interactionIndex];
-            instructionLabel.SetText(currentInteraction.Instruction);
             helpLabel.SetText(currentInteraction.HelpMsg);
             errorLabel.SetText(currentInteraction.ErrorMsg);
+
         }
         else
         {
@@ -107,6 +107,8 @@ public class InteractionManager : MonoBehaviour
         inputBlocked = true;
         yield return new WaitForSeconds(currentInteraction.delay);
         //currentInteraction.OnExecutionFinished?.Invoke();
+        instructionLabel.SetText(currentInteraction.Instruction);
+
         startFadeInUI();
         inputBlocked = false;
     }
