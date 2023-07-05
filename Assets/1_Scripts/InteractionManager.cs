@@ -9,6 +9,7 @@ public class InteractionManager : MonoBehaviour
 {
     [SerializeField] private RectTransform uiCanvasRectTransform;
     [SerializeField] private CanvasGroup uiCanvasGroup;
+    [SerializeField] private GameObject quitWindow;
     [SerializeField] private TextMeshProUGUI instructionLabel;
     [SerializeField] private TextMeshProUGUI helpLabel;
     [SerializeField] private TextMeshProUGUI errorLabel;
@@ -53,7 +54,12 @@ public class InteractionManager : MonoBehaviour
     {
         DebugDrawRay();
 
-        if (!inputBlocked)
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            this.quitWindow.gameObject.SetActive(true);
+        }
+
+            if (!inputBlocked)
         {
             if (Input.GetMouseButtonDown(0))
             {
