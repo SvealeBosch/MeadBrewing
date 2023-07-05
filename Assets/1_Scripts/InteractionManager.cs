@@ -22,6 +22,7 @@ public class InteractionManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI mistakesCountLabel;
     [SerializeField] private TextMeshProUGUI statsHintsCountLabel;
     [SerializeField] private TextMeshProUGUI statsMistakesCountLabel;
+    
 
     [SerializeField] private List<Interaction> interactions;
     private Interaction currentInteraction;
@@ -72,7 +73,7 @@ public class InteractionManager : MonoBehaviour
             
                 RaycastHit hit;
             
-                if (Physics.Raycast(ray, out hit, 10.0f, layerMask))
+                if (Physics.Raycast(ray, out hit, 20.0f, layerMask))
                 {
                     CheckInteractionOrder(hit.transform.gameObject);
                     String objectName = hit.transform.gameObject.name.ToString();
@@ -124,13 +125,13 @@ public class InteractionManager : MonoBehaviour
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, 20.0f, layerMask))
+        if (Physics.Raycast(ray, out hit, 30.0f, layerMask))
         {
             Debug.DrawLine(ray.origin, hit.point, Color.green);
         }
         else
         {
-            Debug.DrawLine(ray.origin, ray.origin + ray.direction * 20.0f, Color.red);
+            Debug.DrawLine(ray.origin, ray.origin + ray.direction * 30.0f, Color.red);
         }
     }
 
@@ -219,5 +220,38 @@ public class InteractionManager : MonoBehaviour
         this.statsHintsCountLabel.SetText(this.hintCount.ToString());
         this.statsMistakesCountLabel.SetText(this.mistakesCount.ToString());
     }
+    
+    public void Restart()
+    {
+        // Reset the interaction index to start from the beginning
+        interactionIndex = 0;
+
+        // Reset mistake and hint counts
+        mistakesCount = 0;
+        hintCount = 0;
+
+        // Reset UI elements
+        hintsCountLabel.SetText("0");
+        mistakesCountLabel.SetText("0");
+        statsHintsCountLabel.SetText("0");
+        statsMistakesCountLabel.SetText("0");
+
+        // Stop any ongoing coroutines
+        StopAllCoroutines();
+
+        // Hide error and hint UI elements
+        errorContainer.gameObject.SetActive(false);
+        hintContainer.gameObject.SetActive(false);
+
+        // Restart the current interaction
+        currentInteraction = interactions[interactionIndex];
+        instructionLabel.SetText(currentInteraction.Instruction);
+        helpLabel.SetText(currentInteraction.HelpMsg);
+        errorLabel.SetText(currentInteraction.ErrorMsg);
+
+        // Unblock input
+        inputBlocked = false;
+    }
+
    
 }
