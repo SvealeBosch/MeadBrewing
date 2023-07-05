@@ -763,7 +763,7 @@ AnimationClip:
   m_HasGenericRootTransform: 1
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 3.7833333
+  - time: 3.0833333
     functionName: switchToCam
     data: 
     objectReferenceParameter: {fileID: 0}
